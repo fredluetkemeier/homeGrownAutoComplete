@@ -2,7 +2,7 @@ import lunr from 'lunr';
 
 let indexes = [];
 
-const setup = sources => {
+const setup = (sources, inputRef, onkeyup) => {
 	indexes = sources.map(source => {
 		return lunr(function() {
 			this.ref('name');
@@ -13,6 +13,8 @@ const setup = sources => {
 			}, this);
 		});
 	});
+
+	inputRef && inputRef.addEventListener('keyup', onkeyup);
 };
 
 const search = inputText =>

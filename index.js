@@ -6,9 +6,7 @@ const resultsRef = document.getElementById('results');
 
 const objectEntries = entries.map(entry => ({ name: entry }));
 
-autoComplete.setup([objectEntries]);
-
-inputRef.addEventListener('keyup', event => {
+autoComplete.setup([objectEntries], inputRef, event => {
 	resultsRef.innerHTML = '';
 
 	const searchTerm = event.target.value.trim();
