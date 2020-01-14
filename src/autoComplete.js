@@ -6,6 +6,17 @@ const defaultOptions = {
 	onKeyUp: null
 };
 
+const tokenMatch = function(builder) {
+	const pipelineFunction = function(token) {
+		token.metadata['match'] = token.toString();
+		return token;
+	};
+
+	lunr.Pipeline.registerFunction(pipelineFunction, 'tokenMatch');
+	builder.pipeline.after(lunr.stemmer, pipelineFunction);
+	builder.metadataWhitelist.push('match');
+};
+
 const setup = (sources, options) => {
 	indexes = buildIndexes(sources);
 
@@ -24,6 +35,8 @@ function buildIndexes(sources) {
 		lunr(function() {
 			this.ref('name');
 			this.field('name');
+
+			this.use(tokenMatch);
 
 			source.forEach(entry => {
 				this.add(entry);
