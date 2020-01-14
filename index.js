@@ -24,8 +24,6 @@ const onKeyUp = event => {
 	});
 };
 
-autoComplete.setup([objectEntries], { inputId: INPUT_ID, onKeyUp });
-
 function addMatchHighlighting(searchTerm, result, highlightClass) {
 	const matchStart = result.toLowerCase().indexOf(searchTerm.toLowerCase());
 	const matchEnd = matchStart + searchTerm.length;
@@ -35,3 +33,5 @@ function addMatchHighlighting(searchTerm, result, highlightClass) {
 
 	return `<span class="${highlightClass}">${highlighted}</span>${rest}`;
 }
+
+autoComplete.setup([objectEntries], { inputId: INPUT_ID, onKeyUp });
