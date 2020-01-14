@@ -1,20 +1,27 @@
 import entries from './entries.json';
 import autoComplete from './src/autoComplete';
 
-const inputRef = document.getElementById('input');
+const inputId = 'input';
 const resultsRef = document.getElementById('results');
 
 const objectEntries = entries.map(entry => ({ name: entry }));
 
-autoComplete.setup([objectEntries], inputRef, event => {
+const onKeyUp = event => {
 	resultsRef.innerHTML = '';
 
-	const searchTerm = event.target.value.trim();
+	const searchTerm = event.target.value;
+
 	const [results] =
 		searchTerm.length > 0 ? autoComplete.search(searchTerm) : [];
-	results.forEach(({ ref }) => {
+
+	results.forEach(result => {
+		const [beginning, end] = result.split(searchTerm);
+
 		const item = document.createElement('li');
-		item.textContent = ref;
+		item.innerHTML = `${beginning}<span class="autoComplete-highlighted">${searchTerm}</span>${end}`;
+
 		resultsRef.appendChild(item);
 	});
-});
+};
+
+autoComplete.setup([objectEntries], { inputId, onKeyUp });
