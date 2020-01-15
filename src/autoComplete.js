@@ -10,7 +10,7 @@ const defaultOptions = {
 const setup = (sources, options) => {
 	searchIndexes = buildIndexes(sources);
 
-	const { inputId, onKeyUp } = consolidateOptions(options);
+	const { inputId, onKeyUp } = consolidateOptions(defaultOptions, options);
 
 	document.getElementById(inputId).addEventListener('keyup', onKeyUp);
 };
@@ -33,7 +33,7 @@ function buildIndexes(sources) {
 	);
 }
 
-function consolidateOptions(options) {
+function consolidateOptions(defaultOptions, options) {
 	const allOptions = {
 		...defaultOptions,
 		...options,

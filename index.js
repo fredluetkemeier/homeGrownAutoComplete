@@ -1,5 +1,6 @@
 import entries from './entries.json';
 import autoComplete, { addMatchHighlighting } from './src/autoComplete';
+import suggestionNavigation from './src/suggestionNavigation';
 
 const INPUT_ID = 'input';
 const resultsRef = document.getElementById('results');
@@ -25,3 +26,10 @@ const onKeyUp = event => {
 };
 
 autoComplete.setup([objectEntries], { inputId: INPUT_ID, onKeyUp });
+
+new suggestionNavigation({
+	listRef: resultsRef,
+	inputId: INPUT_ID,
+	trimText: '',
+	highlightClassName: 'autoComplete-selected',
+});
