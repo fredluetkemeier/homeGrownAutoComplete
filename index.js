@@ -1,5 +1,5 @@
 import entries from './entries.json';
-import autoComplete from './src/autoComplete';
+import autoComplete, { addMatchHighlighting } from './src/autoComplete';
 
 const INPUT_ID = 'input';
 const resultsRef = document.getElementById('results');
@@ -23,28 +23,5 @@ const onKeyUp = event => {
 		resultsRef.appendChild(item);
 	});
 };
-
-function addMatchHighlighting(result, match, highlightClass) {
-	const { before, substring, after } = extractSubstring(result, match);
-
-	return `${before}<span class="${highlightClass}">${substring}</span>${after}`;
-}
-
-function extractSubstring(string, substring) {
-	const [start, end] = findMatchRange(string, substring);
-
-	return {
-		before: string.substring(0, start),
-		substring: string.substring(start, end),
-		after: string.substring(end),
-	};
-}
-
-function findMatchRange(string, substring) {
-	const start = string.toLowerCase().indexOf(substring.toLowerCase());
-	const end = start + substring.length;
-
-	return [start, end];
-}
 
 autoComplete.setup([objectEntries], { inputId: INPUT_ID, onKeyUp });

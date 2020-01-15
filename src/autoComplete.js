@@ -48,6 +48,29 @@ function consolidateOptions(options) {
 	return allOptions;
 }
 
+export const addMatchHighlighting = (result, match, highlightClass) => {
+	const { before, substring, after } = extractSubstring(result, match);
+
+	return `${before}<span class="${highlightClass}">${substring}</span>${after}`;
+};
+
+function extractSubstring(string, substring) {
+	const [start, end] = findMatchRange(string, substring);
+
+	return {
+		before: string.substring(0, start),
+		substring: string.substring(start, end),
+		after: string.substring(end),
+	};
+}
+
+function findMatchRange(string, substring) {
+	const start = string.toLowerCase().indexOf(substring.toLowerCase());
+	const end = start + substring.length;
+
+	return [start, end];
+}
+
 export default {
 	setup,
 	search,
