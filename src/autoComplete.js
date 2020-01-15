@@ -1,32 +1,22 @@
 import lunr from 'lunr';
 
-let indexes = [];
+let searchIndexes = [];
+
 const defaultOptions = {
 	inputId: null,
-	onKeyUp: null
-};
-
-const tokenMatch = function(builder) {
-	const pipelineFunction = function(token) {
-		token.metadata['match'] = token.toString();
-		return token;
-	};
-
-	lunr.Pipeline.registerFunction(pipelineFunction, 'tokenMatch');
-	builder.pipeline.after(lunr.stemmer, pipelineFunction);
-	builder.metadataWhitelist.push('match');
+	onKeyUp: null,
 };
 
 const setup = (sources, options) => {
-	indexes = buildIndexes(sources);
+	searchIndexes = buildIndexes(sources);
 
-	const { inputId, onKeyUp } = validateOptions(options);
+	const { inputId, onKeyUp } = consolidateOptions(options);
 
 	document.getElementById(inputId).addEventListener('keyup', onKeyUp);
 };
 
 const search = inputText =>
-	indexes.map(index =>
+	searchIndexes.map(index =>
 		index.search(`*${inputText.trim()}*`).map(result => result.ref)
 	);
 
@@ -36,8 +26,6 @@ function buildIndexes(sources) {
 			this.ref('name');
 			this.field('name');
 
-			this.use(tokenMatch);
-
 			source.forEach(entry => {
 				this.add(entry);
 			}, this);
@@ -45,10 +33,10 @@ function buildIndexes(sources) {
 	);
 }
 
-function validateOptions(options) {
+function consolidateOptions(options) {
 	const allOptions = {
 		...defaultOptions,
-		...options
+		...options,
 	};
 
 	Object.keys(allOptions).forEach(key => {
@@ -62,5 +50,5 @@ function validateOptions(options) {
 
 export default {
 	setup,
-	search
+	search,
 };
