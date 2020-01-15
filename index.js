@@ -25,16 +25,22 @@ const onKeyUp = event => {
 };
 
 function addMatchHighlighting(result, match, highlightClass) {
-	const [start, end] = findSubstringRange(result, match);
+	const { before, substring, after } = extractSubstring(result, match);
 
-	const before = result.substring(0, start);
-	const highlighted = result.substring(start, end);
-	const rest = result.substring(end);
-
-	return `${before}<span class="${highlightClass}">${highlighted}</span>${rest}`;
+	return `${before}<span class="${highlightClass}">${substring}</span>${after}`;
 }
 
-function findSubstringRange(string, substring) {
+function extractSubstring(string, substring) {
+	const [start, end] = findMatchRange(string, substring);
+
+	return {
+		before: string.substring(0, start),
+		substring: string.substring(start, end),
+		after: string.substring(end),
+	};
+}
+
+function findMatchRange(string, substring) {
 	const start = string.toLowerCase().indexOf(substring.toLowerCase());
 	const end = start + substring.length;
 
