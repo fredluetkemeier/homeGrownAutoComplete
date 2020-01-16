@@ -2,17 +2,12 @@ import lunr from 'lunr';
 
 let searchIndexes = [];
 
-const defaultOptions = {
-	inputId: null,
-	onKeyUp: null,
-};
+const defaultOptions = {};
 
-const setup = (sources, options) => {
+const setup = sources => {
 	searchIndexes = buildIndexes(sources);
 
-	const { inputId, onKeyUp } = consolidateOptions(defaultOptions, options);
-
-	document.getElementById(inputId).addEventListener('keyup', onKeyUp);
+	//consolidateOptions(defaultOptions, options);
 };
 
 const search = inputText =>

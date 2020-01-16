@@ -9,6 +9,8 @@ const objectEntries = entries.map(entry => ({ name: entry }));
 
 const HIGHLIGHT_CLASS = 'autoComplete-highlighted';
 
+autoComplete.setup([objectEntries]);
+
 const onKeyUp = event => {
 	resultsRef.innerHTML = '';
 
@@ -25,11 +27,11 @@ const onKeyUp = event => {
 	});
 };
 
-autoComplete.setup([objectEntries], { inputId: INPUT_ID, onKeyUp });
+document.getElementById(INPUT_ID).addEventListener('keyup', onKeyUp);
 
-new suggestionNavigation({
-	listRef: resultsRef,
-	inputId: INPUT_ID,
-	trimText: '',
-	highlightClassName: 'autoComplete-selected',
-});
+// new suggestionNavigation({
+// 	listRef: resultsRef,
+// 	inputId: INPUT_ID,
+// 	trimText: '',
+// 	highlightClassName: 'autoComplete-selected',
+// });
