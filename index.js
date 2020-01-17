@@ -1,17 +1,25 @@
-import entries from './entries.json';
+import { searchTerms, extras } from './sources.json';
 import autoComplete, { addMatchHighlighting } from './src/autoComplete';
 import suggestionNavigation from './src/suggestionNavigation';
 
+const HIGHLIGHT_CLASS = 'autoComplete-highlighted';
 const INPUT_ID = 'input';
 const resultsRef = document.getElementById('results');
 
-const objectEntries = entries.map(entry => ({ name: entry }));
+autoComplete.setup({
+	sources: [
+		{
+			data: searchTerms.map(entry => ({ name: entry })),
+			limit: 10,
+		},
+		{
+			data: extras.map(entry => ({ name: entry })),
+			limit: 5,
+		},
+	],
+});
 
-const HIGHLIGHT_CLASS = 'autoComplete-highlighted';
-
-autoComplete.setup([objectEntries]);
-
-const temp = new suggestionNavigation({
+const navigation = new suggestionNavigation({
 	listRef: resultsRef,
 	inputId: INPUT_ID,
 	trimText: '',
@@ -23,17 +31,25 @@ const onInput = event => {
 
 	const searchTerm = event.target.value;
 
-	const [results] =
+	const [searchTerms, extras] =
 		searchTerm.length > 0 ? autoComplete.search(searchTerm) : [[]];
 
-	results.forEach(result => {
+	searchTerms.forEach(result => {
 		const item = document.createElement('li');
 		item.innerHTML = addMatchHighlighting(result, searchTerm, HIGHLIGHT_CLASS);
 
 		resultsRef.appendChild(item);
 	});
 
-	temp.handleInput(event);
+	extras.forEach(result => {
+		const item = document.createElement('li');
+		item.innerHTML =
+			addMatchHighlighting(result, searchTerm, HIGHLIGHT_CLASS) +
+			' <span class="extra">EXTRA</span>';
+		resultsRef.appendChild(item);
+	});
+
+	navigation.handleInput(event);
 };
 
 document.getElementById(INPUT_ID).addEventListener('input', onInput);

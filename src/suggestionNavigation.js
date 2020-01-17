@@ -89,10 +89,16 @@ export default function suggestionNavigation(options) {
 	};
 
 	const updateInputValue = () => {
-		inputRef.value =
-			currentIndex === inputIndex
-				? lastInput
-				: listRef.childNodes[currentIndex].innerText.replace(trimText, '');
+		const currentItem = listRef.childNodes[currentIndex];
+
+		const toRemove = currentItem.querySelectorAll('.extra');
+
+		toRemove.forEach(child => {
+			currentItem.removeChild(child);
+			inputRef.value =
+				currentIndex === inputIndex ? lastInput : currentItem.innerText;
+			currentItem.appendChild(child);
+		});
 	};
 
 	const setActiveDescendant = () => {

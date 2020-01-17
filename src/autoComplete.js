@@ -2,12 +2,14 @@ import lunr from 'lunr';
 
 let searchIndexes = [];
 
-const defaultOptions = {};
+const defaultOptions = {
+	sources: null,
+};
 
-const setup = sources => {
+const setup = options => {
+	const { sources } = consolidateOptions(defaultOptions, options);
+
 	searchIndexes = buildIndexes(sources);
-
-	//consolidateOptions(defaultOptions, options);
 };
 
 const search = inputText =>
@@ -16,12 +18,12 @@ const search = inputText =>
 	);
 
 function buildIndexes(sources) {
-	return sources.map(source =>
+	return sources.map(({ data }) =>
 		lunr(function() {
 			this.ref('name');
 			this.field('name');
 
-			source.forEach(entry => {
+			data.forEach(entry => {
 				this.add(entry);
 			}, this);
 		})
