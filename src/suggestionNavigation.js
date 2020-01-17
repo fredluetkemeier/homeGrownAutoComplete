@@ -6,7 +6,7 @@ const defaultOptions = {
 };
 
 export default function suggestionNavigation(options) {
-	const { listRef, trimText, highlightClassName } = consolidateOptions(
+	const { listRef, inputId, trimText, highlightClassName } = consolidateOptions(
 		defaultOptions,
 		options
 	);
@@ -133,7 +133,7 @@ function consolidateOptions(defaultOptions, options) {
 	};
 
 	Object.keys(allOptions).forEach(key => {
-		if (!allOptions[key]) {
+		if (allOptions[key] === null) {
 			throw new Error(`${key} is a required option.`);
 		}
 	});

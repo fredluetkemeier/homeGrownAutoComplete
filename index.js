@@ -11,7 +11,14 @@ const HIGHLIGHT_CLASS = 'autoComplete-highlighted';
 
 autoComplete.setup([objectEntries]);
 
-const onKeyUp = event => {
+const temp = new suggestionNavigation({
+	listRef: resultsRef,
+	inputId: INPUT_ID,
+	trimText: '',
+	highlightClassName: 'autoComplete-selected',
+});
+
+const onInput = event => {
 	resultsRef.innerHTML = '';
 
 	const searchTerm = event.target.value;
@@ -25,13 +32,8 @@ const onKeyUp = event => {
 
 		resultsRef.appendChild(item);
 	});
+
+	temp.handleInput(event);
 };
 
-document.getElementById(INPUT_ID).addEventListener('keyup', onKeyUp);
-
-// new suggestionNavigation({
-// 	listRef: resultsRef,
-// 	inputId: INPUT_ID,
-// 	trimText: '',
-// 	highlightClassName: 'autoComplete-selected',
-// });
+document.getElementById(INPUT_ID).addEventListener('input', onInput);
