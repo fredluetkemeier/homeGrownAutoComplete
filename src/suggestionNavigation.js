@@ -105,13 +105,13 @@ export default function suggestionNavigation(options) {
 	};
 
 	const addHighlight = node => {
-		highlightClassName && node.classList.add(highlightClassName);
+		node.classList.add(highlightClassName);
 		node.setAttribute('aria-selected', 'true');
 		node.setAttribute('id', 'selected');
 	};
 
 	const removeHighlight = node => {
-		highlightClassName && node.classList.remove(highlightClassName);
+		node.classList.remove(highlightClassName);
 		node.setAttribute('aria-selected', 'false');
 		node.removeAttribute('id');
 	};
