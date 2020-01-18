@@ -3,7 +3,10 @@ import lunr from 'lunr';
 let searchIndexes = [];
 
 const defaultOptions = {
-	sources: null,
+	sources: {
+		data: [],
+		limit: null,
+	},
 };
 
 const setup = options => {
@@ -13,36 +16,42 @@ const setup = options => {
 };
 
 const search = inputText =>
-	searchIndexes.map(index =>
-		index.search(`*${inputText.trim()}*`).map(result => result.ref)
-	);
+	searchIndexes.map(({ index, limit }) => {
+		const results = index
+			.search(`*${inputText.trim()}*`)
+			.sort((a, b) => b.score - a.score)
+			.map(result => result.ref);
+
+		return limit ? results.slice(0, limit) : results;
+	});
+
+function consolidateOptions(defaultOptions, options) {
+	Object.keys(defaultOptions).forEach(key => {
+		if (!options[key]) {
+			throw new Error(`${key} is a required option.`);
+		}
+	});
+
+	const allOptions = {
+		...defaultOptions,
+		...options,
+	};
+
+	return allOptions;
+}
 
 function buildIndexes(sources) {
-	return sources.map(({ data }) =>
-		lunr(function() {
+	return sources.map(({ data, limit }) => ({
+		index: lunr(function() {
 			this.ref('name');
 			this.field('name');
 
 			data.forEach(entry => {
 				this.add(entry);
 			}, this);
-		})
-	);
-}
-
-function consolidateOptions(defaultOptions, options) {
-	const allOptions = {
-		...defaultOptions,
-		...options,
-	};
-
-	Object.keys(allOptions).forEach(key => {
-		if (!allOptions[key]) {
-			throw new Error(`${key} is a required option.`);
-		}
-	});
-
-	return allOptions;
+		}),
+		limit,
+	}));
 }
 
 export const addMatchHighlighting = (result, match, highlightClass) => {

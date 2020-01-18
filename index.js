@@ -30,9 +30,11 @@ const onInput = event => {
 	resultsRef.innerHTML = '';
 
 	const searchTerm = event.target.value;
+	if (searchTerm.length == 0) {
+		return;
+	}
 
-	const [searchTerms, extras] =
-		searchTerm.length > 0 ? autoComplete.search(searchTerm) : [[]];
+	const [searchTerms, extras] = autoComplete.search(searchTerm);
 
 	searchTerms.forEach(result => {
 		const item = document.createElement('li');
