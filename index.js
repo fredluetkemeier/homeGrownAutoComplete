@@ -11,7 +11,7 @@ autoComplete.setup({
 	sources: [
 		{
 			data: searchTerms.map(entry => ({ name: entry })),
-			limit: 1000,
+			limit: 10,
 		},
 		{
 			data: extras.map(entry => ({ name: entry })),
@@ -46,8 +46,12 @@ const onInput = event => {
 		resultsRef.appendChild(item);
 	});
 
-	suggestionNavigation.setup(resultsRef.childNodes);
+	suggestionNavigation.setup(inputRef, resultsRef.childNodes);
+};
+
+const onKeyDown = event => {
+	suggestionNavigation.move(event.key);
 };
 
 inputRef.addEventListener('input', onInput);
-inputRef.addEventListener('keydown', () => suggestionNavigation.move(event));
+inputRef.addEventListener('keydown', onKeyDown);

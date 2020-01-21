@@ -19,7 +19,6 @@ const initialOptions = {
 };
 
 let setOptions = {};
-
 let searchIndexes = [];
 
 const setup = options => {
@@ -31,16 +30,6 @@ const setup = options => {
 
 	searchIndexes = buildIndexes(sources);
 };
-
-const search = inputText =>
-	searchIndexes.map(({ index, limit }) => {
-		const results = index
-			.search(setOptions.mode === 'loose' ? `*${inputText}*` : `${inputText}*`)
-			.sort((a, b) => b.score - a.score)
-			.map(result => result.ref);
-
-		return limit ? results.slice(0, limit) : results;
-	});
 
 function validateOptions(required, given) {
 	Object.keys(required).forEach(key => {
@@ -78,6 +67,29 @@ function buildIndexes(sources) {
 	}));
 }
 
+const search = searchTerm =>
+	searchIndexes.map(({ index, limit }) => {
+		const results = index
+			.search(applySearchMode(setOptions.mode, searchTerm))
+			.sort((a, b) => b.score - a.score)
+			.map(result => result.ref);
+
+		return limit ? results.slice(0, limit) : results;
+	});
+
+function applySearchMode(mode, searchText) {
+	const lookBehind = mode === 'loose' ? '*' : '';
+	const lookAhead = mode === 'strict' || 'loose' ? '*' : '';
+
+	return `${lookBehind}${searchText}${lookAhead}`;
+}
+
+export const addMatchHighlighting = (result, match, highlightClass) => {
+	const { before, substring, after } = extractSubstring(result, match);
+
+	return `${before}<span class="${highlightClass}">${substring}</span>${after}`;
+};
+
 function extractSubstring(string, substring) {
 	const [start, end] = findMatchRange(string, substring);
 
@@ -98,10 +110,4 @@ function findMatchRange(string, substring) {
 export default {
 	setup,
 	search,
-};
-
-export const addMatchHighlighting = (result, match, highlightClass) => {
-	const { before, substring, after } = extractSubstring(result, match);
-
-	return `${before}<span class="${highlightClass}">${substring}</span>${after}`;
 };
