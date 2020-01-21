@@ -17,6 +17,7 @@ autoComplete.setup({
 			limit: 5,
 		},
 	],
+	mode: 'strict',
 });
 
 const onInput = event => {

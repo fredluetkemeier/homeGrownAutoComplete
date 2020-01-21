@@ -4,7 +4,7 @@ const initialOptions = {
 	required: {
 		sources: [
 			{
-				data: [],
+				data: null,
 			},
 		],
 	},
@@ -14,8 +14,11 @@ const initialOptions = {
 				limit: null,
 			},
 		],
+		mode: 'loose',
 	},
 };
+
+let setOptions = {};
 
 let searchIndexes = [];
 
@@ -23,7 +26,8 @@ const setup = options => {
 	const { required } = initialOptions;
 
 	validateOptions(required, options);
-	const { sources } = consolidateOptions(initialOptions, options);
+	setOptions = consolidateOptions(initialOptions, options);
+	const { sources } = setOptions;
 
 	searchIndexes = buildIndexes(sources);
 };
@@ -31,7 +35,7 @@ const setup = options => {
 const search = inputText =>
 	searchIndexes.map(({ index, limit }) => {
 		const results = index
-			.search(`*${inputText.trim()}*`)
+			.search(setOptions.mode === 'loose' ? `*${inputText}*` : `${inputText}*`)
 			.sort((a, b) => b.score - a.score)
 			.map(result => result.ref);
 
