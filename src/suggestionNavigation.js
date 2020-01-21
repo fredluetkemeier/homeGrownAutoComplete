@@ -1,5 +1,5 @@
-const defaultOptions = {};
+const move = event => {};
 
-const setup = options => {};
-
-export default {};
+export default {
+	move,
+};

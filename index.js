@@ -5,19 +5,20 @@ import suggestionNavigation from './src/suggestionNavigation';
 const HIGHLIGHT_CLASS = 'autoComplete-highlighted';
 const INPUT_ID = 'input';
 const resultsRef = document.getElementById('results');
+const inputRef = document.getElementById(INPUT_ID);
 
 autoComplete.setup({
 	sources: [
 		{
 			data: searchTerms.map(entry => ({ name: entry })),
-			limit: 10,
+			limit: 1000,
 		},
 		{
 			data: extras.map(entry => ({ name: entry })),
 			limit: 5,
 		},
 	],
-	mode: 'strict',
+	mode: 'loose',
 });
 
 const onInput = event => {
@@ -44,6 +45,9 @@ const onInput = event => {
 			' <span class="extra">EXTRA</span>';
 		resultsRef.appendChild(item);
 	});
+
+	suggestionNavigation.setup(resultsRef.childNodes);
 };
 
-document.getElementById(INPUT_ID).addEventListener('input', onInput);
+inputRef.addEventListener('input', onInput);
+inputRef.addEventListener('keydown', () => suggestionNavigation.move(event));
