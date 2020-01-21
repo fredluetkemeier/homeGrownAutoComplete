@@ -19,13 +19,6 @@ autoComplete.setup({
 	],
 });
 
-const navigation = new suggestionNavigation({
-	listRef: resultsRef,
-	inputId: INPUT_ID,
-	trimText: '',
-	highlightClassName: 'autoComplete-selected',
-});
-
 const onInput = event => {
 	resultsRef.innerHTML = '';
 
@@ -50,8 +43,6 @@ const onInput = event => {
 			' <span class="extra">EXTRA</span>';
 		resultsRef.appendChild(item);
 	});
-
-	navigation.handleInput(event);
 };
 
 document.getElementById(INPUT_ID).addEventListener('input', onInput);
