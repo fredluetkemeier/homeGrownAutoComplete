@@ -1,7 +1,6 @@
 {
 	"name": "homeGrownAutoComplete",
 	"version": "0.0.1",
-	"description": "This is a spiteful project",
 	"main": "index.js",
 	"scripts": {
 		"start": "webpack-dev-server --open --config webpack.config.js"
