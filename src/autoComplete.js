@@ -1,16 +1,29 @@
 import lunr from 'lunr';
 
-let searchIndexes = [];
-
-const defaultOptions = {
-	sources: {
-		data: [],
-		limit: null,
+const initialOptions = {
+	required: {
+		sources: [
+			{
+				data: [],
+			},
+		],
+	},
+	optional: {
+		sources: [
+			{
+				limit: null,
+			},
+		],
 	},
 };
 
+let searchIndexes = [];
+
 const setup = options => {
-	const { sources } = consolidateOptions(defaultOptions, options);
+	const { required } = initialOptions;
+
+	validateOptions(required, options);
+	const { sources } = consolidateOptions(initialOptions, options);
 
 	searchIndexes = buildIndexes(sources);
 };
@@ -25,19 +38,26 @@ const search = inputText =>
 		return limit ? results.slice(0, limit) : results;
 	});
 
-function consolidateOptions(defaultOptions, options) {
-	Object.keys(defaultOptions).forEach(key => {
-		if (!options[key]) {
-			throw new Error(`${key} is a required option.`);
+function validateOptions(required, given) {
+	Object.keys(required).forEach(key => {
+		if (!given[key]) {
+			throw new Error(
+				`${key} is a required option.\n\nThe required options are:\n\n${JSON.stringify(
+					required,
+					null,
+					4
+				)}`
+			);
 		}
 	});
+}
 
-	const allOptions = {
-		...defaultOptions,
-		...options,
+function consolidateOptions({ required, optional }, given) {
+	return {
+		...required,
+		...optional,
+		...given,
 	};
-
-	return allOptions;
 }
 
 function buildIndexes(sources) {
@@ -53,12 +73,6 @@ function buildIndexes(sources) {
 		limit,
 	}));
 }
-
-export const addMatchHighlighting = (result, match, highlightClass) => {
-	const { before, substring, after } = extractSubstring(result, match);
-
-	return `${before}<span class="${highlightClass}">${substring}</span>${after}`;
-};
 
 function extractSubstring(string, substring) {
 	const [start, end] = findMatchRange(string, substring);
@@ -80,4 +94,10 @@ function findMatchRange(string, substring) {
 export default {
 	setup,
 	search,
+};
+
+export const addMatchHighlighting = (result, match, highlightClass) => {
+	const { before, substring, after } = extractSubstring(result, match);
+
+	return `${before}<span class="${highlightClass}">${substring}</span>${after}`;
 };
