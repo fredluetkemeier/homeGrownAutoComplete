@@ -4,7 +4,10 @@ import suggestionNavigation from './src/suggestionNavigation';
 
 const INPUT_ID = 'input';
 const inputRef = document.getElementById(INPUT_ID);
+let searchTerm = '';
+
 const resultsRef = document.getElementById('results');
+const DECORATOR_TEXT = 'EXTRA';
 const HIGHLIGHT_CLASS = 'autoComplete-highlighted';
 
 let currentPosition;
@@ -27,7 +30,7 @@ autoComplete.setup({
 const onInput = event => {
 	resultsRef.innerHTML = '';
 
-	const searchTerm = event.target.value;
+	searchTerm = event.target.value;
 	if (searchTerm.length == 0) {
 		return;
 	}
@@ -45,7 +48,7 @@ const onInput = event => {
 		const item = document.createElement('li');
 		item.innerHTML =
 			addMatchHighlighting(result, searchTerm, HIGHLIGHT_CLASS) +
-			' <span class="extra">EXTRA</span>';
+			` <span class="extra">${DECORATOR_TEXT}</span>`;
 		resultsRef.appendChild(item);
 	});
 
@@ -58,8 +61,12 @@ const onKeyDown = event => {
 
 	resultsRef.childNodes.forEach(node => node.classList.remove(SELECTED_CLASS));
 
-	resultsRef.childNodes[currentPosition - 1] &&
-		resultsRef.childNodes[currentPosition - 1].classList.add(SELECTED_CLASS);
+	const currentResult = resultsRef.childNodes[currentPosition - 1];
+
+	currentResult && currentResult.classList.add(SELECTED_CLASS);
+	inputRef.value = currentResult
+		? currentResult.textContent.replace(DECORATOR_TEXT, '').trim()
+		: searchTerm;
 };
 
 inputRef.addEventListener('input', onInput);

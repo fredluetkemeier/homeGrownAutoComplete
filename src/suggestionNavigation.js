@@ -37,7 +37,7 @@ const move = (currentPosition, event) => {
 function findDirections(key, directions) {
 	return Object.keys(directions)
 		.map(direction => direction)
-		.sort((a, b) => {
+		.sort(a => {
 			if (a === key) return -1;
 		})
 		.map(direction => directions[direction]);
