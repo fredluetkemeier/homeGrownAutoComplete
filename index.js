@@ -1,6 +1,6 @@
 import { searchTerms, extras } from './sources.json';
 import autoComplete, { addMatchHighlighting } from './src/autoComplete';
-import suggestionNavigation from './src/suggestionNavigation';
+import listNavigation from './src/listNavigation';
 
 const INPUT_ID = 'input';
 const inputRef = document.getElementById(INPUT_ID);
@@ -53,11 +53,11 @@ const onInput = event => {
 	});
 
 	currentPosition = 0;
-	suggestionNavigation.setup(resultsRef.childNodes.length);
+	listNavigation.setup(resultsRef.childNodes.length);
 };
 
 const onKeyDown = event => {
-	currentPosition = suggestionNavigation.move(currentPosition, event);
+	currentPosition = listNavigation.move(currentPosition, event);
 
 	resultsRef.childNodes.forEach(node => node.classList.remove(SELECTED_CLASS));
 
