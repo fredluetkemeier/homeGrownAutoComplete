@@ -2,12 +2,13 @@ import { searchTerms, extras } from './sources.json';
 import autoComplete, { addMatchHighlighting } from './src/autoComplete';
 import suggestionNavigation from './src/suggestionNavigation';
 
-const HIGHLIGHT_CLASS = 'autoComplete-highlighted';
 const INPUT_ID = 'input';
-const resultsRef = document.getElementById('results');
 const inputRef = document.getElementById(INPUT_ID);
+const resultsRef = document.getElementById('results');
+const HIGHLIGHT_CLASS = 'autoComplete-highlighted';
 
 let currentPosition;
+const SELECTED_CLASS = 'autoComplete-selected';
 
 autoComplete.setup({
 	sources: [
@@ -55,7 +56,10 @@ const onInput = event => {
 const onKeyDown = event => {
 	currentPosition = suggestionNavigation.move(currentPosition, event);
 
-	console.log(currentPosition);
+	resultsRef.childNodes.forEach(node => node.classList.remove(SELECTED_CLASS));
+
+	resultsRef.childNodes[currentPosition - 1] &&
+		resultsRef.childNodes[currentPosition - 1].classList.add(SELECTED_CLASS);
 };
 
 inputRef.addEventListener('input', onInput);

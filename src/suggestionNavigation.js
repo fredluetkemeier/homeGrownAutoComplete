@@ -21,11 +21,10 @@ const setup = listLength => {
 };
 
 const move = (currentPosition, event) => {
-	const { key } = event;
-	const translatedKey = keyAliases[key];
+	const translatedKey = keyAliases[event.key];
 
 	if (!translatedKey) {
-		return;
+		return currentPosition;
 	}
 	event.preventDefault();
 
