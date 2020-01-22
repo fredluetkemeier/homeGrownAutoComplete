@@ -1,34 +1,44 @@
-let nodeList = [];
-let input;
-
-const directions = {
-	up: {
-		bound: 0,
-		delta: 1,
-	},
-	down: {
-		bound: 0,
-		delta: -1,
-	},
+const keyAliases = {
+	ArrowUp: 'up',
+	ArrowDown: 'down',
+	Up: 'up',
+	Down: 'down',
 };
 
-const setup = (inputRef, childrenRef) => {
-	nodeList = [inputRef, ...childrenRef];
-	input = inputRef;
-
-	directions.down.bound = nodeList.length - 1;
+const bounds = {
+	up: -1,
+	down: null,
 };
 
-const move = direction => {
-	if (!isValidDirection(direction, directions)) {
+const deltas = {
+	up: -1,
+	down: 1,
+};
+
+const setup = listLength => {
+	bounds.down = listLength;
+};
+
+const move = (currentPosition, direction) => {
+	const translatedDirection = keyAliases[direction];
+
+	if (!translatedDirection) {
 		return;
 	}
+
+	const [] = findOrientation(translatedDirection);
+
+	//const { bound, delta } = ;
+	//const nextPosition = currentPosition + delta == bound ? ;
 };
 
-function isValidDirection(direction, directions) {
-	return Object.keys(directions).some(key =>
-		direction.toLowerCase().includes(key)
-	);
+function findOrientation(direction) {}
+
+function findSelectedDirection(directions, direction) {
+	const selectedDirection = directions.filter(value => value[direction]);
+	const otherDirection = directions.filter(value => !value[direction]);
+
+	return [selectedDirection, otherDirection];
 }
 
 export default {

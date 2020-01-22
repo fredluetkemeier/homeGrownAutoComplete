@@ -46,11 +46,11 @@ const onInput = event => {
 		resultsRef.appendChild(item);
 	});
 
-	suggestionNavigation.setup(inputRef, resultsRef.childNodes);
+	suggestionNavigation.setup(resultsRef.childNodes.length);
 };
 
 const onKeyDown = event => {
-	suggestionNavigation.move(event.key);
+	suggestionNavigation.move(0, event.key);
 };
 
 inputRef.addEventListener('input', onInput);
