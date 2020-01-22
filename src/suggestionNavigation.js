@@ -5,40 +5,43 @@ const keyAliases = {
 	Down: 'down',
 };
 
-const bounds = {
-	up: -1,
-	down: null,
-};
-
-const deltas = {
-	up: -1,
-	down: 1,
+const directions = {
+	up: {
+		bound: 0,
+		delta: -1,
+	},
+	down: {
+		bound: null,
+		delta: 1,
+	},
 };
 
 const setup = listLength => {
-	bounds.down = listLength;
+	directions.down.bound = listLength;
 };
 
-const move = (currentPosition, direction) => {
-	const translatedDirection = keyAliases[direction];
+const move = (currentPosition, event) => {
+	const { key } = event;
+	const translatedKey = keyAliases[key];
 
-	if (!translatedDirection) {
+	if (!translatedKey) {
 		return;
 	}
+	event.preventDefault();
 
-	const [] = findOrientation(translatedDirection);
-
-	//const { bound, delta } = ;
-	//const nextPosition = currentPosition + delta == bound ? ;
+	const [theWay, theOtherWay] = findDirections(translatedKey, directions);
+	return currentPosition === theWay.bound
+		? theOtherWay.bound
+		: currentPosition + theWay.delta;
 };
 
-function findOrientation(direction) {}
-
-function findSelectedDirection(directions, direction) {
-	const selectedDirection = directions.filter(value => value[direction]);
-	const otherDirection = directions.filter(value => !value[direction]);
-
-	return [selectedDirection, otherDirection];
+function findDirections(key, directions) {
+	return Object.keys(directions)
+		.map(direction => direction)
+		.sort((a, b) => {
+			if (a === key) return -1;
+		})
+		.map(direction => directions[direction]);
 }
 
 export default {

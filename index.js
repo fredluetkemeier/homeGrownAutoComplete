@@ -7,6 +7,8 @@ const INPUT_ID = 'input';
 const resultsRef = document.getElementById('results');
 const inputRef = document.getElementById(INPUT_ID);
 
+let currentPosition;
+
 autoComplete.setup({
 	sources: [
 		{
@@ -46,11 +48,14 @@ const onInput = event => {
 		resultsRef.appendChild(item);
 	});
 
+	currentPosition = 0;
 	suggestionNavigation.setup(resultsRef.childNodes.length);
 };
 
 const onKeyDown = event => {
-	suggestionNavigation.move(0, event.key);
+	currentPosition = suggestionNavigation.move(currentPosition, event);
+
+	console.log(currentPosition);
 };
 
 inputRef.addEventListener('input', onInput);
