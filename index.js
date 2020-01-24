@@ -31,7 +31,7 @@ const onInput = event => {
 	resultsRef.innerHTML = '';
 
 	searchTerm = event.target.value;
-	if (searchTerm.length == 0) {
+	if (searchTerm.trim().length == 0) {
 		return;
 	}
 

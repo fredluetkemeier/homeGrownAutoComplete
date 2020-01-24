@@ -81,11 +81,11 @@ function applySearchMode(mode, searchText) {
 	const lookBehind = mode === 'loose' ? '*' : '';
 	const lookAhead = mode === 'strict' || 'loose' ? '*' : '';
 
-	return `${lookBehind}${searchText}${lookAhead}`;
+	return `${lookBehind}${searchText.trim()}${lookAhead}`;
 }
 
 export const addMatchHighlighting = (result, match, highlightClass) => {
-	const { before, substring, after } = extractSubstring(result, match);
+	const { before, substring, after } = extractSubstring(result, match.trim());
 
 	return `${before}<span class="${highlightClass}">${substring}</span>${after}`;
 };
