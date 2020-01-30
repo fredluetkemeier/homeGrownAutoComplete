@@ -14,7 +14,7 @@ const initialOptions = {
 				limit: null,
 			},
 		],
-		mode: 'loose',
+		mode: 'loose', // loose, strict, exact
 	},
 };
 

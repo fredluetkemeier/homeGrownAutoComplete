@@ -1,10 +1,3 @@
-const keyAliases = {
-	ArrowUp: 'up',
-	ArrowDown: 'down',
-	Up: 'up',
-	Down: 'down',
-};
-
 const directions = {
 	up: {
 		bound: 0,
@@ -20,18 +13,11 @@ const setup = listLength => {
 	directions.down.bound = listLength;
 };
 
-const move = (currentPosition, event) => {
-	const translatedKey = keyAliases[event.key];
-
-	if (!translatedKey) {
-		return currentPosition;
-	}
-	event.preventDefault();
-
-	const [theWay, theOtherWay] = findDirections(translatedKey, directions);
-	return currentPosition === theWay.bound
-		? theOtherWay.bound
-		: currentPosition + theWay.delta;
+const move = (currentPosition, key) => {
+	const [direction, otherDirection] = findDirections(key, directions);
+	return currentPosition === direction.bound
+		? otherDirection.bound
+		: currentPosition + direction.delta;
 };
 
 function findDirections(key, directions) {

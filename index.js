@@ -13,6 +13,13 @@ const HIGHLIGHT_CLASS = 'autoComplete-highlighted';
 let currentPosition;
 const SELECTED_CLASS = 'autoComplete-selected';
 
+const keyAliases = {
+	ArrowUp: 'up',
+	ArrowDown: 'down',
+	Up: 'up',
+	Down: 'down',
+};
+
 autoComplete.setup({
 	sources: [
 		{
@@ -57,7 +64,14 @@ const onInput = event => {
 };
 
 const onKeyDown = event => {
-	currentPosition = listNavigation.move(currentPosition, event);
+	const translatedKey = keyAliases[event.key];
+
+	if (!translatedKey) {
+		return;
+	}
+	event.preventDefault();
+
+	currentPosition = listNavigation.move(currentPosition, translatedKey);
 
 	resultsRef.childNodes.forEach(node => node.classList.remove(SELECTED_CLASS));
 
